@@ -54,7 +54,7 @@ the 3 models vulnerable to this are Vont Color Pro SLB04, Vont Color SLB02 and V
 
 This model of smart light specifically uses a ESP32-C3 with 4 MB of flash. 
 
-![Capture0](https://github.com/Peaakss/Hacker-Nightlight/assets/115900893/fb5a3753-264c-4b97-b2f8-340ebefa2709) (C3 on light connected to UART)
+![Capture0](https://github.com/user-attachments/assets/969175d2-9d4c-4ca0-9f9f-4b83856c588f) (C3 on light connected to UART)
 
 Using these GPIO pins for light control: 
 
