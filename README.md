@@ -147,7 +147,6 @@ you rush.
 * **Digging out the potting/rubber is the worst part.** Keep a trash bin right next to
   you — it's messy and there's a lot of it.
 
-![Bulb PCB after teardown](images/pcb.jpg)
 
 ## Soldering the flash leads
 
