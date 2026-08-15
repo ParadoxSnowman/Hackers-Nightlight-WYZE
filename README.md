@@ -10,8 +10,22 @@
 
 <p align="center">Learn more here: https://hackersnightlight.com </p>
 
+---
 
+> ## About this fork
+>
+> This is a fork focused on **making the LED / light control on the Wyze Bulb Color
+> actually work and be usable.** Upstream shipped the Wyze color control as "WIP" —
+> the endpoint didn't drive the light. This fork adds a working `BP5758D` driver and
+> a dedicated web page (`<IP>/light`) for changing color and brightness from a phone
+> or browser.
+>
+> **This fork does not touch the pentesting features.** It only fixes and adds the
+> lighting side; everything else is unchanged from upstream. The updated Wyze
+> walkthrough is in the [Wyze Bulb Color](#wyze-bulb-color-wlpa19cv2) section below,
+> and a full driver / API / build reference is in [`WYZE/LIGHT.md`](WYZE/LIGHT.md).
 
+---
 
 ## Hacker-Nightlight
 
@@ -107,15 +121,109 @@ Tiktok Demo: https://www.tiktok.com/@o.mg_peaks/video/7360587336507280683
 
 The Wyze bulb colors use the exact same MCU as the vont color lights. ESP32-C3, however have a diffrent flashing process.
 
+Bulb link: https://www.amazon.com/dp/B097C3VLLL
+
 ![IMG_1663](https://github.com/hak5peaks/Hackers-Nightlight/assets/115900893/f475e295-e994-411f-8fcc-7a32f0029c96)
 
-rather then grounding a single GPIO pin to set the chip into boot loader, these bulbs require that GPIO8 needs to be set to high (jump to 3.3v) and GPIO9 needs to be grounded
+> **This fork makes the Wyze color control work.** The Wyze drives its LEDs through a
+> **BP5758D** constant-current driver, which upstream never wired up — so color was a
+> no-op. This fork adds a real driver plus a `<IP>/light` page to change color and
+> brightness. Full technical reference: [`WYZE/LIGHT.md`](WYZE/LIGHT.md).
+>
+> **Check the chip first.** Wyze has shipped more than one hardware revision of this
+> bulb. This firmware targets the **ESP32-C3** version — confirm the module inside is
+> an ESP32-C3 before taking one apart.
+
+## Opening the bulb (go slow — the plastic is brittle)
+
+The housing isn't built to come apart. Expect to fight it, and expect casualties if
+you rush.
+
+* **The outer case may crack.** Work around the seam slowly and evenly — prying hard
+  in one spot is how it splits.
+* **The LED module connector is fragile.** When you separate the LED board from the
+  driver board, the inner plastic around those connector pins can crack. Ease it
+  apart; don't yank the connector.
+* **Digging out the potting/rubber is the worst part.** Keep a trash bin right next to
+  you — it's messy and there's a lot of it.
+
+![Bulb PCB after teardown](images/pcb.jpg)
+
+## Soldering the flash leads
+
+Solder six wires to the ESP32-C3 for UART flashing. **The copper pads tear off
+easily** — use flux, a fine tip, and get in and out in a couple of seconds per joint.
+If a pad lifts, solder directly to the module pin instead.
+
+| Wire   | Bulb pad     | CP2102 pin |
+|--------|--------------|------------|
+| Black  | GND          | GND |
+| Red    | 3.3V         | 3V3 |
+| Green  | TX (GPIO21)  | RXD |
+| Blue   | RX (GPIO20)  | TXD |
+| Orange | GPIO8        | 3V3 |
+| White  | GPIO9        | GND |
+
+Unlike the Vont (where you only ground IO9), the Wyze needs **both** straps:
 
 ```
-GPIO8 -> HIGH
-GPIO9 -> LOW
+GPIO8 -> HIGH  (bridge to 3.3V)
+GPIO9 -> LOW   (bridge to GND)
 ```
 
-Flash process remains the same.
+* **Serial crosses:** bulb TX -> dongle RX, bulb RX -> dongle TX.
+* **Make sure none of your connector pins touch.** This is the most finicky part — a
+  bridge between adjacent pins stops the flash cold. Check continuity with a
+  multimeter before powering anything.
+* **Confirm the dongle is on 3.3 V, not 5 V.** 5 V can kill the module.
+
+![Wiring legend](images/pinout.jpg)
+![Soldered leads](images/wiring.jpg)
+
+## Flashing (Linux)
+
+Plug the soldered leads into the CP2102 dongle, then into USB. With the GPIO8/GPIO9
+straps in place, the chip boots into bootloader mode ready to flash.
+
+**1. Install esptool**
+```
+sudo apt install esptool     # or: pip install esptool
+```
+
+**2. Find the port**
+```
+ls /dev/ttyUSB*
+```
+Usually `/dev/ttyUSB0`. If the port keeps disappearing or renumbering, Kali's
+`brltty` daemon is cycling the adapter — `sudo apt remove brltty`, then replug.
+
+**3. Back up stock firmware first (don't skip — it's your only rollback and holds the device keys)**
+```
+esptool --chip esp32c3 -p /dev/ttyUSB0 -b 115200 --before no_reset --after no_reset \
+  read_flash 0 0x400000 wyze_stock.bin
+```
+
+**4. Flash** (building from source? see [`WYZE/LIGHT.md`](WYZE/LIGHT.md))
+```
+esptool --chip esp32c3 -p /dev/ttyUSB0 -b 115200 --before no_reset --after no_reset \
+  write_flash --flash_mode qio --flash_size 4MB \
+  0x0 bootloader.bin 0x8000 partitions.bin 0x10000 firmware.bin
+```
+Three `Hash of data verified.` lines = success. If it resets partway or reports
+`BROWNOUT_RST`, the CP2102's regulator is sagging — add a 470-1000uF cap across the
+bulb's 3V3/GND, or power the module from an external 3.3 V source.
+
+## After flashing
+
+1. Unplug the dongle from USB.
+2. **Remove the GPIO8 and GPIO9 strap wires** (orange and white, off 3.3V and GND).
+   Leaving them on keeps the chip in bootloader mode and it won't run.
+3. Plug back in to power it.
+
+Join the bulb's AP, open its IP for the main page, then go to **`<IP>/light`** for the
+color and brightness controls. Tap a color, drag the brightness slider, or use the
+warm-white tab — no app, no terminal.
+
+![The /light control page](images/light-page.jpg)
 
 # [Big thanks to https://github.com/Spooks4576 for assisting in the creation of the firmware]
