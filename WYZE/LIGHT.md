@@ -1,4 +1,3 @@
-cat > ~/Hackers-Nightlight/WYZE/LIGHT.md << 'LIGHTMD'
 # Wyze Bulb Color (WLPA19CV2) — Working LED Control
 
 This document covers the **LED / light-control additions** for the Wyze Bulb Color
