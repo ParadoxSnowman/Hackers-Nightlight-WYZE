@@ -221,4 +221,4 @@ Join the bulb's AP, open its IP for the main page, then go to **`<IP>/light`** f
 color and brightness controls. Tap a color, drag the brightness slider, or use the
 warm-white tab — no app, no terminal.
 
-# [Big thanks to https://github.com/Spooks4576 for assisting in the creation of the firmware]
+# Big thanks to https://github.com/Spooks4576 for assisting in the creation of the firmware
