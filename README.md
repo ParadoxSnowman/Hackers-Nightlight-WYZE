@@ -23,7 +23,7 @@
 > **This fork does not touch the pentesting features.** It only fixes and adds the
 > lighting side; everything else is unchanged from upstream. The updated Wyze
 > walkthrough is in the [Wyze Bulb Color](#wyze-bulb-color-wlpa19cv2) section below,
-> and a full driver / API / build reference is in [`WYZE/LIGHT.md`](WYZE/LIGHT.md).
+> and a full driver / API / build reference is in [`WYZE/LIGHT.md`](WYZE/readme.md).
 
 ---
 
