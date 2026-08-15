@@ -177,9 +177,6 @@ GPIO9 -> LOW   (bridge to GND)
   multimeter before powering anything.
 * **Confirm the dongle is on 3.3 V, not 5 V.** 5 V can kill the module.
 
-![Wiring legend](images/pinout.jpg)
-![Soldered leads](images/wiring.jpg)
-
 ## Flashing (Linux)
 
 Plug the soldered leads into the CP2102 dongle, then into USB. With the GPIO8/GPIO9
@@ -223,7 +220,5 @@ bulb's 3V3/GND, or power the module from an external 3.3 V source.
 Join the bulb's AP, open its IP for the main page, then go to **`<IP>/light`** for the
 color and brightness controls. Tap a color, drag the brightness slider, or use the
 warm-white tab — no app, no terminal.
-
-![The /light control page](images/light-page.jpg)
 
 # [Big thanks to https://github.com/Spooks4576 for assisting in the creation of the firmware]
