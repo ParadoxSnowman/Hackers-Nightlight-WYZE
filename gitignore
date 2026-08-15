@@ -1,0 +1,13 @@
+# PlatformIO build output
+WYZE/.pio/
+VONT/.pio/
+
+# Firmware dumps — never commit stock images (they hold device keys)
+*.bin
+!WYZE/bins/*.bin
+!VONT/bins/*.bin
+
+# Editor / OS cruft
+.vscode/
+.DS_Store
+*.swp
