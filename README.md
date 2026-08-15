@@ -46,40 +46,6 @@ One model is the ESP32-C3. Capability of doing such this such as
 
 With many open source firmwares public on github such as https://github.com/risinek/esp32-wifi-penetration-tool
 
-# Vont Smartlight Pros
-
-Searching Amazon endless for models using ESP32 chips within their hardware I stumbled upon Vonts Smart Light Pro. 
-
-the 3 models vulnerable to this are Vont Color Pro SLB04, Vont Color SLB02 and Vont Color SLB01 (More to come)
-
-This model of smart light specifically uses a ESP32-C3 with 4 MB of flash. 
-
-![Capture0](https://github.com/user-attachments/assets/969175d2-9d4c-4ca0-9f9f-4b83856c588f) (C3 on light connected to UART)
-
-Using these GPIO pins for light control: 
-
-* GPIO03    PWM_i 5    Warm White
-* GPIO04    PWM 4    Cool White
-* GPIO05    PWM 3    Blue
-* GPIO06    PWM 1    Red
-* GPIO07    PWM 2    Green
-
-Tearing into the light bulb reveals UART copper pads allowing someone to easily soder and access the ESP32-C3 via UART on the PCB
-
-
-![Untitled-1](https://github.com/Peaakss/Hacker-Nightlight/assets/115900893/e68fed69-ae99-4fa5-ab37-bb71a288bb7b)
-
-
-
-By leveraging the appropriate firmware, an attacker can readily implant a backdoor using the ESP32-C3 chip, enabling remote connectivity to the PCB for executing attacks or packet sniffing, all while maintaining the appearance and functionality of a typical Smart Light bulb.
-
-
-
-(Vont has went out of business and no longer sells smart home application or this model of lightbulb) 
-
-(Old Amazon Link https://www.amazon.com/dp/B09K38ZXYG)
-
-
 # Soldering Uart connections
 
 Using a $7 USB to TTL on amazon we can connect the TX to RX together on the TTL USB while also grounding IO9 on the light bulb PCB, setting the ESP32-C3 into boot loader mode from there we can flash our new firmware. Once the chip is flashed, unground IO9 and power cycle and the ESP will reboot into the newly flashed firmware
@@ -151,7 +117,5 @@ GPIO9 -> LOW
 ```
 
 Flash process remains the same.
-
-## THESE LIGHTS USE BP5758 LED DRIVER, FULL LED CONTROL FROM THE WEB SERVER IS STILL WIP.
 
 # [Big thanks to https://github.com/Spooks4576 for assisting in the creation of the firmware]
