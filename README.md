@@ -127,7 +127,7 @@ Bulb link: https://www.amazon.com/dp/B097C3VLLL
 
 > **This fork makes the Wyze color control work.** The Wyze drives its LEDs through a
 > **BP5758D** constant-current driver, which upstream never wired up — so color was a
-> no-op. This fork adds a real driver plus a `<IP>/light` page to change color and
+> no-op. This fork adds a real driver plus a `192.168.4.1/light` page to change color and
 > brightness. Full technical reference: [`WYZE/LIGHT.md`](WYZE/LIGHT.md).
 >
 > **Check the chip first.** Wyze has shipped more than one hardware revision of this
