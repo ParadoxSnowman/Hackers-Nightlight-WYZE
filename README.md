@@ -17,7 +17,7 @@
 > This is a fork focused on **making the LED / light control on the Wyze Bulb Color
 > actually work and be usable.** Upstream shipped the Wyze color control as "WIP" —
 > the endpoint didn't drive the light. This fork adds a working `BP5758D` driver and
-> a dedicated web page (`<IP>/light`) for changing color and brightness from a phone
+> a dedicated web page (`192.168.4.1/light`) for changing color and brightness from a phone
 > or browser.
 >
 > **This fork does not touch the pentesting features.** It only fixes and adds the
